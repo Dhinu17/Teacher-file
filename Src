@@ -1,0 +1,49 @@
+import json
+import os
+from datetime import datetime
+
+TEACHERS_FILE = "teachers.json"
+
+def load_teachers():
+    if os.path.exists(TEACHERS_FILE):
+        with open(TEACHERS_FILE, "r") as file:
+            return json.load(file)
+    else:
+        return []
+
+def save_teachers(teachers):
+    with open(TEACHERS_FILE, "w") as file:
+        json.dump(teachers, file, indent=2)
+
+def show_all_teachers(teachers):
+    for teacher in teachers:
+        print(f"Name: {teacher['name']}, Age: {teacher['age']}, DOB: {teacher['dob']}, Classes: {teacher['classes']}")
+
+def add_teacher(teachers, name, age, dob, classes):
+    teachers.append({"name": name, "age": age, "dob": dob, "classes": classes})
+    save_teachers(teachers)
+
+def filter_teachers_by_age(teachers, target_age):
+    return [teacher for teacher in teachers if teacher["age"] == target_age]
+
+def filter_teachers_by_classes(teachers, target_classes):
+    return [teacher for teacher in teachers if teacher["classes"] == target_classes]
+
+# Example usage:
+teachers_records = load_teachers()
+
+# Add a teacher
+add_teacher(teachers_records, "John Doe", 30, "1993-01-15", 5)
+
+# Show all teachers
+show_all_teachers(teachers_records)
+
+# Filter teachers by age
+filtered_by_age = filter_teachers_by_age(teachers_records, 30)
+print("Teachers filtered by age:")
+show_all_teachers(filtered_by_age)
+
+# Filter teachers by classes
+filtered_by_classes = filter_teachers_by_classes(teachers_records, 5)
+print("Teachers filtered by classes:")
+show_all_teachers(filtered_by_classes)
